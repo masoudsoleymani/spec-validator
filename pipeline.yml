@@ -1,0 +1,22 @@
+name: $(Build.DefinitionName)-$(Build.BuildId)
+
+pr: none
+
+stages:
+  - stage: Validate_spec
+    displayName: "Validate Spec"
+    pool:
+      vmImage: 'ubuntu-latest'
+    jobs:
+      - job: ValidateSpac
+        displayName: Validate API Spac
+        workspace:
+          clean: all
+        steps:
+          - task: DockerInstaller@0
+            inputs:
+              dockerVersion: '24.0.2'
+          - script: |
+              docker pull swaggerapi/swagger-editor
+              docker run -p 80:8080 swaggerapi/swagger-editor
+            displayName: 'Run Docker Container'
